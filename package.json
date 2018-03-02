@@ -1,0 +1,42 @@
+{
+  "name": "waveshaper-dom",
+  "version": "0.0.1",
+  "description": "DOM render library for waveshaper",
+  "main": "dist/waveshaper-dom.js",
+  "types": "dist/typings/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build:dev": "webpack --output-filename=\"waveshaper-dom.js\"",
+    "build:prod": "webpack -p --output-filename=\"waveshaper-dom.min.js\"",
+    "build": "yarn build:dev && yarn build:prod",
+    "start": "webpack-dev-server --hot --inline",
+    "test": "yarn karma start travis.conf.js --single-run",
+    "test:dev": "yarn karma start karma.conf.js"
+  },
+  "repository": "https://www.github.com/Idicious/waveshaper-dom.git",
+  "author": "David Sherman",
+  "license": "MIT",
+  "dependencies": {
+    "hammerjs": "^2.0.8",
+    "waveshaper": "^0.2.0"
+  },
+  "devDependencies": {
+    "@types/hammerjs": "^2.0.35",
+    "@types/jasmine": "^2.8.6",
+    "jasmine-core": "^2.99.1",
+    "jasmine-ts": "^0.2.1",
+    "karma": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coveralls": "^1.1.2",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-jasmine": "^1.1.1",
+    "karma-typescript": "^3.0.12",
+    "ts-loader": "^3.5.0",
+    "typescript": "^2.7.2",
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.3"
+  }
+}
