@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/Idicious/waveshaper-dom.svg?branch=master)](https://travis-ci.org/Idicious/waveshaper-dom)
-[![Coverage Status](https://coveralls.io/repos/github/Idicious/waveshaper-dom/badge.svg?branch=master)](https://coveralls.io/github/Idicious/waveshaper-dom?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Idicious/waveshaper-dom/badge.svg)](https://coveralls.io/github/Idicious/waveshaper-dom)
 [![npm version](https://badge.fury.io/js/waveshaper-dom.svg)](https://badge.fury.io/js/waveshaper-dom)
 
 # waveshaper-dom
