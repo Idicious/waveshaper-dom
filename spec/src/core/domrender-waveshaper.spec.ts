@@ -1,8 +1,61 @@
 import WS from '../../../src'
+import { DomRenderWaveShaper } from '../../../src';
 
 describe('DomRenderWaveShaper test.', () => {
     it('Creates default instance.', () => {
         expect(WS).not.toBeNull();
+    });
+
+    it('Throws when setInteraction is called with null.', () => {
+        expect(() => WS.setInteraction(null as any)).toThrow();
+    });
+
+    it('Can be constructed with partial options.', () => {
+        const waveshaper = new DomRenderWaveShaper({ samplesPerPixel: 1024 });
+        expect(waveshaper.options.mode).toBe('pan');
+    });
+
+    it('Throws when registering invalid canvas.', () => {
+        const invalidRegisterElement = document.createElement('div') as any;
+        invalidRegisterElement.getContext = () => null;
+        expect(() => WS.registerCanvas('1', invalidRegisterElement as any, 'green')).toThrow();
+    });
+
+    it('Works correctly without devicePixelRatio.', () => {
+        (devicePixelRatio as any) = null;
+
+        const canvas = document.createElement('canvas');
+        WS.registerCanvas('1', canvas, 'green');
+
+        expect(canvas.width).toBe(WS.options.width);
+    });
+
+    it('Uses device pixel ratio 1 if smaller than 1.', () => {
+        devicePixelRatio = 0.5;
+
+        const canvas = document.createElement('canvas');
+        WS.registerCanvas('1', canvas, 'green');
+
+        expect(canvas.width).toBe(WS.options.width);
+    });
+
+    it('Correctly sets canvas with with devicePixelRatio greater than 1.', () => {
+        devicePixelRatio = 1.5;
+
+        const canvas = document.createElement('canvas');
+        WS.registerCanvas('1', canvas, 'green');
+
+        expect(canvas.width).toBe(WS.options.width * 1.5);
+    });
+
+    it('Does not set canvas active when the registerSetsActive option is false.', () => {
+        const waveshaper = new DomRenderWaveShaper();
+        waveshaper.setOptions({ registerSetsActive: false });
+
+        const canvas = document.createElement('canvas');
+        waveshaper.registerCanvas('1', canvas, 'green');
+
+        expect(waveshaper.activeWaveShapers.length).toBe(0);
     });
 
     it('Gives back correct scrollWidth', () => {

@@ -22,10 +22,7 @@ export default (manager: DomRenderWaveShaper,canvas: HTMLCanvasElement, dragStat
     }
 
     const pointerEnter = (ev: PointerEvent) => {
-        if (dragState.options == null || dragState.options.mode !== 'drag')
-            return;
-
-        if (dragState.activeSegment == null || dragState.dragWave == null)
+        if (dragState.options == null || dragState.options.mode !== 'drag' || dragState.activeSegment == null || dragState.dragWave == null)
             return;
 
         const canvas = dragState.options.getEventTarget(ev);

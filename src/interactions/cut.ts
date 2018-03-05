@@ -18,13 +18,13 @@ export default (manager: DomRenderWaveShaper, hammer: HammerManager) => {
         if(options == null || !shouldHandle(target, options))
             return;
 
-        const id = target.getAttribute('data-wave-id');
-        if(id == null) return;
+        // Allready checked for null
+        const id = <string>target.getAttribute('data-wave-id');
 
         const wave = manager.getTrack(id);
         if(wave == null) return;
 
-        const bb = ev.target.getBoundingClientRect();
+        const bb = target.getBoundingClientRect();
         const time = (options.scrollPosition + (ev.center.x - bb.left)) * (options.samplesPerPixel / options.samplerate);
 
         const interval = wave.flattened.find(i => i.start + i.offsetStart <= time && i.end >= time);

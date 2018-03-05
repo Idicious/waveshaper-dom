@@ -49,7 +49,7 @@ export default function(manager: DomRenderWaveShaper, hammer: HammerManager) {
         if(newPosition === panState.options.scrollPosition)
             return;
 
-        if(position > panState.panMax - panState.options.width)
+        if(newPosition > panState.panMax - panState.options.width)
             return;
         
         manager.setOptions({ scrollPosition: newPosition }).process();

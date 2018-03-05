@@ -38,14 +38,14 @@ export default function(manager: DomRenderWaveShaper, hammer: HammerManager) {
         if(!shouldHandle(target, options))
             return;
 
-        const id = target.getAttribute('data-wave-id');
-        if(id == null) return;
+        // Already checked that it exists
+        const id = <string>target.getAttribute('data-wave-id');
 
         const wave = manager.getTrack(id);
         if(wave == null) return;
 
-        const bb = ev.target.getBoundingClientRect();
-        const time = (options.scrollPosition + (ev.center.x - bb.left)) * options.samplesPerPixel / options.samplerate;
+        const bb = target.getBoundingClientRect();
+        const time = ((options.scrollPosition + (ev.center.x - bb.left)) * options.samplesPerPixel) / options.samplerate;
 
         const interval = wave.flattened.find(i => i.start + i.offsetStart <= time && i.end >= time);
 
@@ -72,13 +72,10 @@ export default function(manager: DomRenderWaveShaper, hammer: HammerManager) {
 
     hammer.on('panmove', (ev) =>  {
         const target = manager.options.getEventTarget(ev.srcEvent);
-        if(resizeState.dragWave == null || resizeState.options == null || !shouldHandle(target, resizeState.options))
+        if(resizeState.dragWave == null || resizeState.activeSegment == null || resizeState.options == null || !shouldHandle(target, resizeState.options))
             return;
 
         const options = manager.options;
-            
-        if(resizeState.activeSegment == null)
-            return;
 
         const change = (ev.deltaX * options.samplesPerPixel) / options.samplerate;
         let newTime = resizeState.activeSegmentSide === 'left' ?

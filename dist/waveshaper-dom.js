@@ -162,19 +162,25 @@ var rms_1 = __webpack_require__(2);
 var flatten_1 = __webpack_require__(3);
 var Track = /** @class */ (function () {
     function Track(id, intervals) {
-        var _this = this;
         this.id = id;
-        this.intervals = intervals;
-        /**
-         * Gets the duration of the audio in seconds
-         *
-         * @returns Decimal value of total duration in seconds
-         */
-        this.getDuration = function () { return Math.max.apply(Math, _this.intervals.map(function (s) { return s.end; })); };
-        this.flattened = flatten_1.default(this.intervals);
+        this.intervals = intervals || [];
+        this._flattened = flatten_1.default(this.intervals);
     }
+    Object.defineProperty(Track.prototype, "flattened", {
+        get: function () { return this._flattened.slice(); },
+        enumerable: true,
+        configurable: true
+    });
     Track.prototype.flatten = function () {
-        this.flattened = flatten_1.default(this.intervals);
+        this._flattened = flatten_1.default(this.intervals);
+    };
+    /**
+     * Gets the duration of the audio in seconds
+     *
+     * @returns Decimal value of total duration in seconds
+     */
+    Track.prototype.getDuration = function () {
+        return Math.max.apply(Math, this.intervals.map(function (s) { return s.end; }));
     };
     /**
      * Gets the summerized values for the current settings
@@ -379,6 +385,8 @@ var start = function (segment) { return segment.start + segment.offsetStart; };
  * @returns flattened Interval array
  */
 exports.default = (function (segments) {
+    if (segments == null || segments.length === 0)
+        return [];
     var sorted = sort(segments);
     var normalized = normalizeIndex(sorted);
     var copied = copy(normalized);
@@ -650,18 +658,13 @@ var WaveShaper = /** @class */ (function () {
          */
         this.audioData = new Map();
         /**
-         * @description Active id's, redraws when draw is called without argument
-         *
-         * @memberof WaveShaper
-         */
-        this.activeWaveShapers = [];
-        /**
          * @description Map of callback functions
          *
          * @readonly
          * @memberof WaveShaper
          */
         this.callbackMap = new Map();
+        this._activeWaveShapers = [];
         if (!this.optionsValid(options)) {
             throw new Error("Invalid options given: " + JSON.stringify(options));
         }
@@ -675,6 +678,18 @@ var WaveShaper = /** @class */ (function () {
          * @memberof WaveShaper
          */
         get: function () { return __assign({}, this._options); },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(WaveShaper.prototype, "activeWaveShapers", {
+        /**
+         * @description Active id's, redraws when draw is called without argument
+         *
+         * @readonly
+         * @unused
+         * @memberof WaveShaper
+         */
+        get: function () { return this._activeWaveShapers.slice(); },
         enumerable: true,
         configurable: true
     });
@@ -700,6 +715,21 @@ var WaveShaper = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * Gives the position corresponding to a given time
+     *
+     * @param time
+     */
+    WaveShaper.prototype.timeToPosition = function (time) {
+        return (time * this._options.samplerate) / this._options.samplesPerPixel;
+    };
+    /**
+     * Gives the time corresponding to a given position
+     * @param position
+     */
+    WaveShaper.prototype.positionToTime = function (position) {
+        return (position * this._options.samplesPerPixel) / this._options.samplerate;
+    };
     /**
      * @description Flattens the segments of the given waveshaper id
      *
@@ -807,22 +837,22 @@ var WaveShaper = /** @class */ (function () {
      * @returns WaveShaper instance
      */
     WaveShaper.prototype.setTracks = function () {
-        var _this = this;
         var tracks = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             tracks[_i] = arguments[_i];
         }
-        tracks.forEach(function (track) {
-            var foundWave = _this.getTrack(track.id);
+        for (var i = 0; i < tracks.length; i++) {
+            var track = tracks[i];
+            var foundWave = this.getTrack(track.id);
             if (foundWave == null) {
                 var wave = new track_1.default(track.id, track.intervals);
-                _this.tracks.set(track.id, wave);
+                this.tracks.set(track.id, wave);
             }
             else {
-                foundWave.intervals = track.intervals;
+                foundWave.intervals = track.intervals || [];
                 foundWave.flatten();
             }
-        });
+        }
         this._duration = this.getDuration();
         return this;
     };
@@ -858,7 +888,7 @@ var WaveShaper = /** @class */ (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             ids[_i] = arguments[_i];
         }
-        this.activeWaveShapers = ids;
+        this._activeWaveShapers = ids;
         return this;
     };
     /**
@@ -928,8 +958,8 @@ var WaveShaper = /** @class */ (function () {
         }
         if (ids.length > 0)
             return ids;
-        if (this.activeWaveShapers && this.activeWaveShapers.length > 0)
-            return this.activeWaveShapers;
+        if (this._activeWaveShapers.length > 0)
+            return this._activeWaveShapers;
         return Array.from(this.tracks.keys());
     };
     WaveShaper.prototype.removeCallbacksById = function (id) {
@@ -973,6 +1003,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var domrender_waveshaper_1 = __webpack_require__(3);
+exports.DomRenderWaveShaper = domrender_waveshaper_1.default;
 exports.default = new domrender_waveshaper_1.default();
 
 
@@ -1037,6 +1068,15 @@ var DomRenderWaveShaper = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(DomRenderWaveShaper.prototype, "hammer", {
+        get: function () { return this._hammer; },
+        enumerable: true,
+        configurable: true
+    });
+    DomRenderWaveShaper.prototype.setOptions = function (input) {
+        this._options = __assign({}, this._options, input);
+        return this;
+    };
     /**
      * @description When a canvas is registered through this method each time the
      * waveform is updated the canvas will be rerendered.
@@ -1069,10 +1109,7 @@ var DomRenderWaveShaper = /** @class */ (function (_super) {
         this.unregisterMap.set(id, unregister);
         // If registerSetsActive is true 
         if (this._options.registerSetsActive) {
-            if (this.activeWaveShapers)
-                this.setActive.apply(this, this.activeWaveShapers.concat(id));
-            else
-                this.setActive(id);
+            this.setActive.apply(this, this.activeWaveShapers.concat(id));
         }
         return this;
     };
@@ -1094,11 +1131,9 @@ var DomRenderWaveShaper = /** @class */ (function (_super) {
             this.unregisterMap.delete(id);
         }
         if (this._options.registerSetsActive) {
-            if (this.activeWaveShapers) {
-                var index = this.activeWaveShapers.indexOf(id);
-                if (index != -1)
-                    this.setActive.apply(this, this.activeWaveShapers.splice(index, 1));
-            }
+            var index = this.activeWaveShapers.indexOf(id);
+            if (index != -1)
+                this.setActive.apply(this, this.activeWaveShapers.splice(index, 1));
         }
         return this;
     };
@@ -1131,6 +1166,7 @@ var DomRenderWaveShaper = /** @class */ (function (_super) {
         this.unregister();
         element.setAttribute('touch-action', 'none');
         var hammer = new Hammer(element, hammerconfig_1.default);
+        this._hammer = hammer;
         drag_1.default(this, hammer, dragstate_1.dragState);
         cut_1.default(this, hammer);
         pan_1.default(this, hammer);
@@ -1144,6 +1180,7 @@ var DomRenderWaveShaper = /** @class */ (function (_super) {
     DomRenderWaveShaper.prototype.clearInteraction = function () {
         this.unregister();
         this.unregister = function () { };
+        this._hammer = null;
     };
     return DomRenderWaveShaper;
 }(waveshaper_1.WaveShaper));
@@ -1193,13 +1230,12 @@ exports.default = (function (manager, hammer) {
         var target = manager.options.getEventTarget(ev.srcEvent);
         if (options == null || !shouldHandle(target, options))
             return;
+        // Allready checked for null
         var id = target.getAttribute('data-wave-id');
-        if (id == null)
-            return;
         var wave = manager.getTrack(id);
         if (wave == null)
             return;
-        var bb = ev.target.getBoundingClientRect();
+        var bb = target.getBoundingClientRect();
         var time = (options.scrollPosition + (ev.center.x - bb.left)) * (options.samplesPerPixel / options.samplerate);
         var interval = wave.flattened.find(function (i) { return i.start + i.offsetStart <= time && i.end >= time; });
         if (interval == null)
@@ -1238,13 +1274,12 @@ exports.default = (function (manager, hammer, dragState) {
         var target = manager.options.getEventTarget(ev.srcEvent);
         if (!shouldHandle(target, options))
             return;
+        // Allready checked for existance
         var id = target.getAttribute('data-wave-id');
-        if (id == null)
-            return;
         var wave = manager.getTrack(id);
         if (wave == null)
             return;
-        var bb = ev.target.getBoundingClientRect();
+        var bb = target.getBoundingClientRect();
         var time = (options.scrollPosition + (ev.center.x - bb.left)) * (options.samplesPerPixel / options.samplerate);
         var interval = wave.flattened.find(function (i) { return i.start + i.offsetStart <= time && i.end >= time; });
         if (interval == null)
@@ -1261,11 +1296,8 @@ exports.default = (function (manager, hammer, dragState) {
     });
     hammer.on('panmove', function (ev) {
         var target = manager.options.getEventTarget(ev.srcEvent);
-        if (dragState.options == null || !shouldHandle(target, dragState.options))
-            return;
-        if (dragState.activeSegment == null || dragState.dragWave == null)
-            return;
-        if (dragState.dragging)
+        if (dragState.options == null || dragState.activeSegment == null || dragState.dragWave == null
+            || dragState.dragging || !shouldHandle(target, dragState.options))
             return;
         dragState.dragging = true;
         /**
@@ -1338,7 +1370,7 @@ function default_1(manager, hammer) {
         // If it was and is still 0 no need to update
         if (newPosition === panState.options.scrollPosition)
             return;
-        if (position > panState.panMax - panState.options.width)
+        if (newPosition > panState.panMax - panState.options.width)
             return;
         manager.setOptions({ scrollPosition: newPosition }).process();
     });
@@ -1440,14 +1472,13 @@ function default_1(manager, hammer) {
         var target = manager.options.getEventTarget(ev.srcEvent);
         if (!shouldHandle(target, options))
             return;
+        // Already checked that it exists
         var id = target.getAttribute('data-wave-id');
-        if (id == null)
-            return;
         var wave = manager.getTrack(id);
         if (wave == null)
             return;
-        var bb = ev.target.getBoundingClientRect();
-        var time = (options.scrollPosition + (ev.center.x - bb.left)) * options.samplesPerPixel / options.samplerate;
+        var bb = target.getBoundingClientRect();
+        var time = ((options.scrollPosition + (ev.center.x - bb.left)) * options.samplesPerPixel) / options.samplerate;
         var interval = wave.flattened.find(function (i) { return i.start + i.offsetStart <= time && i.end >= time; });
         if (interval == null)
             return;
@@ -1467,11 +1498,9 @@ function default_1(manager, hammer) {
     });
     hammer.on('panmove', function (ev) {
         var target = manager.options.getEventTarget(ev.srcEvent);
-        if (resizeState.dragWave == null || resizeState.options == null || !shouldHandle(target, resizeState.options))
+        if (resizeState.dragWave == null || resizeState.activeSegment == null || resizeState.options == null || !shouldHandle(target, resizeState.options))
             return;
         var options = manager.options;
-        if (resizeState.activeSegment == null)
-            return;
         var change = (ev.deltaX * options.samplesPerPixel) / options.samplerate;
         var newTime = resizeState.activeSegmentSide === 'left' ?
             resizeState.activeSegmentOffsetStart + change :
@@ -1586,9 +1615,7 @@ exports.default = (function (manager, canvas, dragState) {
         canvas.removeEventListener('pointerdown', downlistener);
     };
     var pointerEnter = function (ev) {
-        if (dragState.options == null || dragState.options.mode !== 'drag')
-            return;
-        if (dragState.activeSegment == null || dragState.dragWave == null)
+        if (dragState.options == null || dragState.options.mode !== 'drag' || dragState.activeSegment == null || dragState.dragWave == null)
             return;
         var canvas = dragState.options.getEventTarget(ev);
         if (canvas == null || !(canvas instanceof HTMLCanvasElement))

@@ -22,13 +22,13 @@ export default (manager: DomRenderWaveShaper, hammer: HammerManager, dragState: 
         if (!shouldHandle(target, options))
             return;
 
-        const id = target.getAttribute('data-wave-id');
-        if(id == null) return;
+        // Allready checked for existance
+        const id = <string>target.getAttribute('data-wave-id');
 
         const wave = manager.getTrack(id);
         if(wave == null) return;
 
-        const bb = ev.target.getBoundingClientRect();
+        const bb = target.getBoundingClientRect();
         const time = (options.scrollPosition + (ev.center.x - bb.left)) * (options.samplesPerPixel / options.samplerate);
         const interval = wave.flattened.find(i => i.start + i.offsetStart <= time && i.end >= time);
 
@@ -50,13 +50,8 @@ export default (manager: DomRenderWaveShaper, hammer: HammerManager, dragState: 
 
     hammer.on('panmove', (ev: HammerInput) => {
         const target = manager.options.getEventTarget(ev.srcEvent);
-        if (dragState.options == null || !shouldHandle(target, dragState.options))
-            return;
-
-        if (dragState.activeSegment == null || dragState.dragWave == null)
-            return;
-
-        if (dragState.dragging)
+        if (dragState.options == null || dragState.activeSegment == null || dragState.dragWave == null 
+            || dragState.dragging || !shouldHandle(target, dragState.options))
             return;
 
         dragState.dragging = true;

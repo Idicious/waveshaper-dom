@@ -28,10 +28,19 @@ export default class DomRenderWaveShaper extends WaveShaper {
     public get options(): DomOptions { return { ...this._options }; }
     protected _options: DomOptions;
 
+    public get hammer(): HammerManager | null { return this._hammer; }
+    protected _hammer: HammerManager | null;
+
     constructor(options: DomInput = defaultDomOptions) {
         super(options);
 
         this._options = { ...defaultDomOptions, ...this._options };
+    }
+
+    setOptions(input: DomInput) {
+        this._options = { ...this._options, ...input };
+
+        return this;
     }
 
     /**
@@ -75,8 +84,7 @@ export default class DomRenderWaveShaper extends WaveShaper {
 
         // If registerSetsActive is true 
         if(this._options.registerSetsActive) {
-            if(this.activeWaveShapers) this.setActive(...this.activeWaveShapers.concat(id));
-            else this.setActive(id);
+            this.setActive(...this.activeWaveShapers.concat(id));
         }
 
         return this;
@@ -102,10 +110,8 @@ export default class DomRenderWaveShaper extends WaveShaper {
         }
 
         if(this._options.registerSetsActive) {
-            if(this.activeWaveShapers) {
-                const index = this.activeWaveShapers.indexOf(id);
-                if(index != -1) this.setActive(...this.activeWaveShapers.splice(index, 1))
-            }
+            const index = this.activeWaveShapers.indexOf(id);
+            if(index != -1) this.setActive(...this.activeWaveShapers.splice(index, 1));
         }
 
         return this;
@@ -136,7 +142,9 @@ export default class DomRenderWaveShaper extends WaveShaper {
         this.unregister();
 
         element.setAttribute('touch-action', 'none');
+        
         const hammer = new Hammer(element, hammerConfig);
+        this._hammer = hammer;
     
         drag(this, hammer, dragState);
         cut(this, hammer);
@@ -153,6 +161,8 @@ export default class DomRenderWaveShaper extends WaveShaper {
 
     clearInteraction() {
         this.unregister();
-        this.unregister = () => { }
+        this.unregister = () => { };
+
+        this._hammer = null;
     }
 }
