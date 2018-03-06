@@ -11,6 +11,25 @@ This library offers high performance real-time drawing + interaction of audio wa
 - resize
 - cut
 
+## Installation
+``` 
+npm install waveshaper-dom
+```
+
+## Demo's
+- [Basic multi-track](https://idicious.github.io/waveshaper-demo/)
+- More coming soon!
+
+When including the script as a tag in the page you must include the hammerjs script before it.
+```
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
+```
+
+All pages using this library should include the following script tag before any others for maximum cross browser compatibility:
+```
+<script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
+``` 
+
 Besides touch/mouse interaction the values can be changed programmatically via the setOptions method.
 
 ### Options
@@ -20,22 +39,6 @@ Besides touch/mouse interaction the values can be changed programmatically via t
 | samplesPerPixel | number | Zoom level, lower to zoom in, higher to zoom out.
 | resolution | number | Quality, higher for more detail, lower for faster rendering. |
 | mode | 'pan', 'drag', 'resize', 'cut' | Active interaction form, pan includes pinch zoom on touch devices. |
-
-## Installation
-``` 
-npm install waveshaper-dom
-```
-
-When including the script as a tag in the page you must include the hammerjs script before it.
-
-```
-<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
-```
-
-All pages using this library should include the following script tag before any others for maximum cross browser compatibility:
-```
-<script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
-``` 
 
 ## Example
 ```
