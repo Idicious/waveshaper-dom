@@ -11,14 +11,14 @@ This library offers high performance real-time drawing + interaction of audio wa
 - resize
 - cut
 
+## Demo's
+- [Basic multi-track](https://idicious.github.io/waveshaper-demo/)
+- More coming soon!
+
 ## Installation
 ``` 
 npm install waveshaper-dom
 ```
-
-## Demo's
-- [Basic multi-track](https://idicious.github.io/waveshaper-demo/)
-- More coming soon!
 
 When including the script as a tag in the page you must include the hammerjs script before it.
 ```
