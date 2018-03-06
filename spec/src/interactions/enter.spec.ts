@@ -36,7 +36,9 @@ describe('Drag tests.', () => {
             deltaX: 10
         });
 
-        const pointerEnter = new CustomEvent('pointerenter', { detail: { target: canvasTrack2 } });
+        document.elementFromPoint = () => canvasTrack2;
+
+        const pointerEnter = new CustomEvent('pointermove');
         canvasTrack2.dispatchEvent(pointerEnter);
 
         WS.hammer.emit('panend', {
@@ -50,27 +52,6 @@ describe('Drag tests.', () => {
 
         expect(track1.intervals.length).toBe(0);
         expect(track2.intervals.length).toBe(2);
-
-        expect(spy).toHaveBeenCalled();
-    });
-
-    it('Releases pointercapture.', () => {
-        const container = document.createElement('div');
-        WS.setInteraction(container).setOptions({ mode: 'pan' });
-
-        if(WS.hammer == null) {
-            return fail('Hammer instance not created.');
-        }
-
-        const canvas = document.createElement('canvas');
-        const spy = jasmine.createSpy();
-
-        canvas.releasePointerCapture = spy;
-
-        WS.registerCanvas('2', canvas, 'whitesmoke');
-
-        const pointerDownEvent = new CustomEvent('pointerdown', { detail: {pointerId: 1} });
-        canvas.dispatchEvent(pointerDownEvent);
 
         expect(spy).toHaveBeenCalled();
     });

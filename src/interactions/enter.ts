@@ -1,10 +1,9 @@
 import { DragState } from "../models/dragstate";
 import DomRenderWaveShaper from '../core/domrender-waveshaper';
 
-export default (manager: DomRenderWaveShaper,canvas: HTMLCanvasElement, dragState: DragState): () => void => {
+export default (manager: DomRenderWaveShaper, canvas: HTMLCanvasElement, dragState: DragState): () => void => {
 
     const enterlistener = (ev: PointerEvent) => pointerEnter(ev);
-    const downlistener = (ev: PointerEvent) => canvas.releasePointerCapture(ev.pointerId);
 
 
     /**
@@ -13,19 +12,20 @@ export default (manager: DomRenderWaveShaper,canvas: HTMLCanvasElement, dragStat
      * into another canvas the segment is tranfered to the 
      * new canvas.
      */
-    canvas.addEventListener('pointerenter', enterlistener);
-    canvas.addEventListener('pointerdown', downlistener);
+    canvas.addEventListener('pointermove', enterlistener);
 
     const destroy = () => {
-        canvas.removeEventListener('pointerenter', enterlistener);
-        canvas.removeEventListener('pointerdown', downlistener);
+        canvas.removeEventListener('pointermove', enterlistener);
     }
 
     const pointerEnter = (ev: PointerEvent) => {
-        if (dragState.options == null || dragState.options.mode !== 'drag' || dragState.activeSegment == null || dragState.dragWave == null)
+        if (dragState.options == null || dragState.options.mode !== 'drag')
             return;
 
-        const canvas = dragState.options.getEventTarget(ev);
+        if(dragState.activeSegment == null || dragState.dragWave == null)
+            return;
+
+        const canvas = document.elementFromPoint(ev.clientX, ev.clientY);
         if (canvas == null || !(canvas instanceof HTMLCanvasElement))
             return;
 

@@ -25,6 +25,7 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'https://code.jquery.com/pep/0.4.3/pep.min.js',
       'src/**/*.ts',
       'spec/**/*.ts',
       { pattern: 'spec/**/*.wav', included: false, served: true },

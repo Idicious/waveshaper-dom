@@ -1287,6 +1287,9 @@ exports.default = (function (manager, hammer, dragState) {
         var segment = wave.intervals.find(function (s) { return s.id === interval.id; });
         if (segment == null)
             return;
+        if (ev.srcEvent instanceof PointerEvent) {
+            target.setPointerCapture(ev.srcEvent.pointerId);
+        }
         dragState.options = options;
         dragState.activeSegment = segment;
         dragState.activeSegmentStart = dragState.activeSegment.start;
@@ -1357,6 +1360,9 @@ function default_1(manager, hammer) {
         var target = manager.options.getEventTarget(ev.srcEvent);
         if (!shouldHandle(target, options))
             return;
+        if (ev.srcEvent instanceof PointerEvent) {
+            target.setPointerCapture(ev.srcEvent.pointerId);
+        }
         panState.panMax = manager.scrollWidth + endMargin;
         panState.panStart = options.scrollPosition;
     });
@@ -1410,6 +1416,9 @@ function default_1(manager, hammer) {
         var target = manager.options.getEventTarget(ev.srcEvent);
         if (!shouldHandle(target, options))
             return;
+        if (ev.srcEvent instanceof PointerEvent) {
+            target.setPointerCapture(ev.srcEvent.pointerId);
+        }
         zoomState.sppStart = options.samplesPerPixel;
         zoomState.maxWidth = manager.scrollWidth + endMargin;
     });
@@ -1489,6 +1498,9 @@ function default_1(manager, hammer) {
         var segment = wave.intervals.find(function (s) { return s.id === interval.id; });
         if (segment == null)
             return;
+        if (ev.srcEvent instanceof PointerEvent) {
+            target.setPointerCapture(ev.srcEvent.pointerId);
+        }
         resizeState.options = options;
         resizeState.activeSegment = segment;
         resizeState.activeSegmentOffsetStart = segment.offsetStart;
@@ -1601,23 +1613,22 @@ exports.default = (function (waveform, options, ctx, color) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = (function (manager, canvas, dragState) {
     var enterlistener = function (ev) { return pointerEnter(ev); };
-    var downlistener = function (ev) { return canvas.releasePointerCapture(ev.pointerId); };
     /**
      * Fires when the mouse moves over the container,
      * If a segment is being dragged and the pointer moves
      * into another canvas the segment is tranfered to the
      * new canvas.
      */
-    canvas.addEventListener('pointerenter', enterlistener);
-    canvas.addEventListener('pointerdown', downlistener);
+    canvas.addEventListener('pointermove', enterlistener);
     var destroy = function () {
-        canvas.removeEventListener('pointerenter', enterlistener);
-        canvas.removeEventListener('pointerdown', downlistener);
+        canvas.removeEventListener('pointermove', enterlistener);
     };
     var pointerEnter = function (ev) {
-        if (dragState.options == null || dragState.options.mode !== 'drag' || dragState.activeSegment == null || dragState.dragWave == null)
+        if (dragState.options == null || dragState.options.mode !== 'drag')
             return;
-        var canvas = dragState.options.getEventTarget(ev);
+        if (dragState.activeSegment == null || dragState.dragWave == null)
+            return;
+        var canvas = document.elementFromPoint(ev.clientX, ev.clientY);
         if (canvas == null || !(canvas instanceof HTMLCanvasElement))
             return;
         var id = canvas.getAttribute('data-wave-id');

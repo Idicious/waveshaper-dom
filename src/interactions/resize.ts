@@ -35,6 +35,7 @@ export default function(manager: DomRenderWaveShaper, hammer: HammerManager) {
     hammer.on('panstart', (ev) => { 
         const options = manager.options;
         const target = manager.options.getEventTarget(ev.srcEvent);
+        
         if(!shouldHandle(target, options))
             return;
 
@@ -59,6 +60,10 @@ export default function(manager: DomRenderWaveShaper, hammer: HammerManager) {
 
         const segment = wave.intervals.find(s => s.id === interval.id);
         if(segment == null) return;
+
+        if(ev.srcEvent instanceof PointerEvent) { 
+            target.setPointerCapture(ev.srcEvent.pointerId);
+        }
 
         resizeState.options = options;
         resizeState.activeSegment = segment;

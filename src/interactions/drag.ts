@@ -38,6 +38,10 @@ export default (manager: DomRenderWaveShaper, hammer: HammerManager, dragState: 
         const segment = wave.intervals.find(s => s.id === interval.id);
         if(segment == null) return;
 
+        if(ev.srcEvent instanceof PointerEvent) { 
+            target.setPointerCapture(ev.srcEvent.pointerId);
+        }
+
         dragState.options = options;
 
         dragState.activeSegment = segment;

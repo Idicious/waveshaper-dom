@@ -31,6 +31,10 @@ export default function(manager: DomRenderWaveShaper, hammer: HammerManager) {
         if(!shouldHandle(target, options))
             return;
 
+        if(ev.srcEvent instanceof PointerEvent) { 
+            target.setPointerCapture(ev.srcEvent.pointerId);
+        }
+
         panState.panMax = manager.scrollWidth + endMargin;
         panState.panStart = options.scrollPosition;
     });
