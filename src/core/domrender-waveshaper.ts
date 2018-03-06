@@ -39,6 +39,7 @@ export default class DomRenderWaveShaper extends WaveShaper {
 
     setOptions(input: DomInput) {
         this._options = { ...this._options, ...input };
+        this.invokeOptionsCallbacks(this.options);
 
         return this;
     }
