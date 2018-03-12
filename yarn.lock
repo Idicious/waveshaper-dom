@@ -5322,9 +5322,9 @@ watchpack@^1.4.0:
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
 
-waveshaper@^0.2.13:
-  version "0.2.13"
-  resolved "https://registry.yarnpkg.com/waveshaper/-/waveshaper-0.2.13.tgz#d954eff31ecb0b1d428b4f0e37e8150e985d42df"
+waveshaper@^0.2.14:
+  version "0.2.14"
+  resolved "https://registry.yarnpkg.com/waveshaper/-/waveshaper-0.2.14.tgz#940f541b34ff308ea91828be7239b82b46dd6d79"
 
 wbuf@^1.1.0, wbuf@^1.7.2:
   version "1.7.2"

@@ -42,7 +42,7 @@ export default function(manager: DomRenderWaveShaper, hammer: HammerManager) {
     hammer.on('pinchmove', (ev) => {
         zoomState.options = manager.options;
         const target = manager.options.getEventTarget(ev.srcEvent);
-        if(zoomState.options == null || !shouldHandle(target, zoomState.options))
+        if(zoomState.options == null || !shouldHandle(target, zoomState.options) || ev.scale <= 0)
             return;
 
         const sampleAtLeft = zoomState.options.scrollPosition * zoomState.options.samplesPerPixel;
