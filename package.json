@@ -1,6 +1,6 @@
 {
   "name": "waveshaper-dom",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "DOM render library for waveshaper",
   "main": "dist/waveshaper-dom.js",
   "types": "dist/typings/index.d.ts",
@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "hammerjs": "^2.0.8",
-    "waveshaper": "^0.2.13"
+    "waveshaper": "^0.2.14"
   },
   "devDependencies": {
     "@types/hammerjs": "^2.0.35",
