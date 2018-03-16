@@ -8,6 +8,14 @@
     "dist",
     "src"
   ],
+  "keywords": [
+    "audio",
+    "waveform",
+    "rendering",
+    "touch",
+    "mobile",
+    "editing"
+  ],
   "scripts": {
     "build:dev": "webpack --output-filename=\"waveshaper-dom.js\"",
     "build:prod": "webpack -p --output-filename=\"waveshaper-dom.min.js\"",
