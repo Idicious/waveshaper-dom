@@ -1442,7 +1442,7 @@ function default_1(manager, hammer) {
     hammer.on('pinchmove', function (ev) {
         zoomState.options = manager.options;
         var target = manager.options.getEventTarget(ev.srcEvent);
-        if (zoomState.options == null || !shouldHandle(target, zoomState.options) || ev.scale <= 0)
+        if (zoomState.options == null || !shouldHandle(target, zoomState.options) || ev.scale == null || ev.scale <= 0)
             return;
         var sampleAtLeft = zoomState.options.scrollPosition * zoomState.options.samplesPerPixel;
         var samplesInView = zoomState.options.width * zoomState.options.samplesPerPixel;
