@@ -20,12 +20,14 @@ This library offers high performance real-time drawing + interaction of audio wa
 npm install waveshaper-dom
 ```
 
-When including the script as a tag in the page you must include the hammerjs script before it.
+You can include it as a script tag with:
 ```
-<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"></script>
+<script src="https://code.jquery.com/pep/0.4.3/pep.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+<script src="https://unpkg.com/waveshaper-dom@0.2.19/dist/waveshaper-dom.min.js"></script>
 ```
 
-All pages using this library should include the following script tag before any others for maximum cross browser compatibility:
+All pages using this library should include the jquery pep library before hammer and waveshaper-dom for maximum cross browser compatibility:
 ```
 <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
 ``` 
