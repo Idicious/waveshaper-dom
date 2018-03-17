@@ -1448,6 +1448,8 @@ function default_1(manager, hammer) {
         var samplesInView = zoomState.options.width * zoomState.options.samplesPerPixel;
         var samplesToCenter = samplesInView / 2;
         var newSpp = zoomState.sppStart * ev.scale;
+        if (newSpp == 0)
+            return;
         var newSamplesInView = zoomState.options.width * newSpp;
         var newSamplesToCenter = newSamplesInView / 2;
         var maxWidth = manager.scrollWidth + endMargin;
