@@ -50,6 +50,7 @@ export default function(manager: DomRenderWaveShaper, hammer: HammerManager) {
         const samplesToCenter = samplesInView / 2;
 
         const newSpp = zoomState.sppStart * ev.scale;
+        if(newSpp == 0) return;
 
         const newSamplesInView = zoomState.options.width * newSpp;
         const newSamplesToCenter = newSamplesInView / 2;
