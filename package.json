@@ -1,6 +1,6 @@
 {
   "name": "waveshaper-dom",
-  "version": "0.2.17",
+  "version": "0.2.18",
   "description": "DOM render library for waveshaper",
   "main": "dist/waveshaper-dom.js",
   "types": "dist/typings/index.d.ts",
