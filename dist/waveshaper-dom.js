@@ -1149,8 +1149,10 @@ var DomRenderWaveShaper = /** @class */ (function (_super) {
         }
         if (this._options.registerSetsActive) {
             var index = this.activeWaveShapers.indexOf(id);
-            if (index != -1)
-                this.setActive.apply(this, this.activeWaveShapers.splice(index, 1));
+            if (index != -1) {
+                this.setActive.apply(this, this.activeWaveShapers.filter(function (trackId) { return trackId !== id; }));
+            }
+            ;
         }
         return this;
     };

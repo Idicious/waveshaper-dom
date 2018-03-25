@@ -112,7 +112,9 @@ export default class DomRenderWaveShaper extends WaveShaper {
 
         if(this._options.registerSetsActive) {
             const index = this.activeWaveShapers.indexOf(id);
-            if(index != -1) this.setActive(...this.activeWaveShapers.splice(index, 1));
+            if(index != -1) { 
+                this.setActive(...this.activeWaveShapers.filter(trackId => trackId !== id));
+            };
         }
 
         return this;
