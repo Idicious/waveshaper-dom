@@ -5267,11 +5267,11 @@ watchpack@^1.5.0:
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
 
-waveshaper@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/waveshaper/-/waveshaper-0.4.1.tgz#878730e05a44fd3dccdff72d4a85f549a5f9b56b"
+waveshaper@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/waveshaper/-/waveshaper-0.4.2.tgz#01cb494bb0ef965ab1e7a89ad0bc2c6e7e968881"
   dependencies:
-    weighted-interval-merge "^0.2.1"
+    weighted-interval-merge "^0.2.2"
 
 wbuf@^1.1.0, wbuf@^1.7.2:
   version "1.7.3"
@@ -5425,7 +5425,7 @@ websocket-extensions@>=0.1.1:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.3.tgz#5d2ff22977003ec687a4b87073dfbbac146ccf29"
 
-weighted-interval-merge@^0.2.1:
+weighted-interval-merge@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/weighted-interval-merge/-/weighted-interval-merge-0.2.2.tgz#26ed8ba666a47f39b3fd1a97533a1c01717bc4f0"
 

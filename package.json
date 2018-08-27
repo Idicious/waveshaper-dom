@@ -17,8 +17,8 @@
     "editing"
   ],
   "scripts": {
-    "build:dev": "webpack --output-filename=\"waveshaper-dom.js\"",
-    "build:prod": "webpack -p --output-filename=\"waveshaper-dom.min.js\"",
+    "build:dev": "webpack --mode development --output-filename=\"waveshaper-dom.js\"",
+    "build:prod": "webpack --mode production --output-filename=\"waveshaper-dom.min.js\"",
     "build": "yarn build:dev && yarn build:prod",
     "start": "webpack-dev-server --hot --inline",
     "test": "yarn karma start travis.conf.js --single-run",
@@ -29,7 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "hammerjs": "^2.0.8",
-    "waveshaper": "^0.4.1"
+    "waveshaper": "^0.4.2"
   },
   "devDependencies": {
     "@types/hammerjs": "^2.0.35",
