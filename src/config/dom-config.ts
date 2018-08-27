@@ -11,6 +11,7 @@ export interface DomOptions extends ManagerOptions {
     height: number;
     generateId: GenerateId;
     mode: InteractionMode;
+    clampFn: (n: number) => number;
 }
 
 export interface DomInput extends ManagerInput {
@@ -19,6 +20,7 @@ export interface DomInput extends ManagerInput {
     height?: number;
     generateId?: GenerateId;
     mode?: InteractionMode;
+    clampFn?: (n: number) => number;
 }
 
 const defaultDomOptions: DomOptions = {
@@ -27,7 +29,8 @@ const defaultDomOptions: DomOptions = {
     height: 150,
     getEventTarget: (ev) => <HTMLElement>ev.target,
     generateId: () => Math.random().toString(),
-    registerSetsActive: true 
+    registerSetsActive: true,
+    clampFn: n => n
 }
 
 export default defaultDomOptions;

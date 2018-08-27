@@ -39,14 +39,16 @@ export default (manager: DomRenderWaveShaper, canvas: HTMLCanvasElement, dragSta
             const index = dragState.dragWave.intervals.indexOf(dragState.activeSegment);
             dragState.dragWave.intervals.splice(index, 1);
 
+            dragState.activeSegment.trackId = wave.id;
             wave.intervals.push(dragState.activeSegment);
+
             dragState.activeSegment.index = 1000;
 
             const currentId = dragState.dragWave.id;
             dragState.dragWave = wave;
 
-            manager.flatten(wave.id, currentId);
-            manager.process(wave.id, currentId);
+            manager.flatten([wave.id, currentId]);
+            manager.process([wave.id, currentId]);
         }
     }
 

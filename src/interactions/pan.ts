@@ -47,7 +47,8 @@ export default function(manager: DomRenderWaveShaper, hammer: HammerManager) {
             return;
 
         const position = panState.panStart - ev.deltaX;
-        const newPosition = position > 0 ? position : 0;
+        const newPosition = Math.floor(position > 0 ? position : 0);
+        const change = newPosition - panState.options.scrollPosition;
 
         // If it was and is still 0 no need to update
         if(newPosition === panState.options.scrollPosition)
@@ -56,7 +57,10 @@ export default function(manager: DomRenderWaveShaper, hammer: HammerManager) {
         if(newPosition > panState.panMax - panState.options.width)
             return;
         
-        manager.setOptions({ scrollPosition: newPosition }).process();
+        const start = change > 0 ? panState.options.width - change : 0;
+        const width = Math.abs(change);
+        
+        manager.setOptions({ scrollPosition: newPosition }).process(undefined, start, width, change);
     });
 
     hammer.on('panend', (ev) => {

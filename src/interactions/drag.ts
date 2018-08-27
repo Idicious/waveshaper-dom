@@ -38,6 +38,8 @@ export default (manager: DomRenderWaveShaper, hammer: HammerManager, dragState: 
         const segment = wave.intervals.find(s => s.id === interval.id);
         if(segment == null) return;
 
+        dragState.startState = { ...segment };
+
         if(ev.srcEvent instanceof PointerEvent) { 
             target.setPointerCapture(ev.srcEvent.pointerId);
         }
@@ -74,6 +76,8 @@ export default (manager: DomRenderWaveShaper, hammer: HammerManager, dragState: 
         const change = (ev.deltaX * dragState.options.samplesPerPixel) / dragState.options.samplerate;
         let newTime = dragState.activeSegmentStart + change;
 
+        newTime = manager.options.clampFn(newTime);
+
         if (newTime + dragState.activeSegment.offsetStart < 0) {
             newTime = -dragState.activeSegment.offsetStart;
         }
@@ -81,8 +85,8 @@ export default (manager: DomRenderWaveShaper, hammer: HammerManager, dragState: 
         dragState.activeSegment.start = newTime;
         dragState.activeSegment.end = newTime + dragState.duration;
 
-        manager.flatten(dragState.dragWave.id);
-        manager.process(dragState.dragWave.id);
+        manager.flatten([dragState.dragWave.id]);
+        manager.process([dragState.dragWave.id]);
 
         dragState.dragging = false;
     });
@@ -92,10 +96,14 @@ export default (manager: DomRenderWaveShaper, hammer: HammerManager, dragState: 
         if (dragState.options == null || !shouldHandle(target, dragState.options))
             return;
 
+        if(dragState.startState != null && dragState.activeSegment != null) 
+            manager.emitSegment(dragState.startState, { ...dragState.activeSegment });
+
         dragState.activeSegment = null;
         dragState.activeSegmentStart = 0;
         dragState.dragWave = null;
         dragState.options = null;
         dragState.duration = 0;
+        dragState.startState = null;
     });
 }
